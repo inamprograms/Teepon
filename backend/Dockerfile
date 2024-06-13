@@ -3,10 +3,6 @@ FROM python:3.11.9
 ENV PYTHONUNBUFFERED=1
 WORKDIR /app
 
-# Required to install mysqlclient with Pip
-RUN apt-get update \
-  && apt-get install python3-dev default-libmysqlclient-dev gcc -y
-
 # Install poetry
 RUN pip install --upgrade pip
 RUN pip install poetry
