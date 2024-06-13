@@ -1,0 +1,36 @@
+[tool.poetry]
+name = "teepon"
+version = "0.1.0"
+description = "Agile Loop hackaton"
+authors = ["Teepon Team"]
+license = "MIT"
+readme = "README.md"
+
+[tool.poetry.dependencies]
+python = "^3.11"
+python-dotenv = "*"
+flask = "*"
+numpy = "*"
+pymongo = "*"
+bson = "*"
+
+embedchain = "*"
+deeplake = "*"
+transformers = "*"
+youtube-transcript-api = "*"
+pytube = "*"
+exceptiongroup = "*"
+async-timeout = "*"
+poetry="*"
+
+[tool.poetry.dev-dependencies]
+autopep8 = "*"
+pytest = "*"
+pytest-watch = "*"
+model-bakery = "*"
+locust = "*"
+
+[build-system]
+requires = ["poetry-core>=1.0.0"]
+build-backend = "poetry.core.masonry.api"
+
