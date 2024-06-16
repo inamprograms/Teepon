@@ -5,6 +5,7 @@ import { useAuthState } from 'react-firebase-hooks/auth';
 import { auth } from '@/app/firebase/config';
 import { useRouter } from 'next/navigation';
 import { signOut } from 'firebase/auth';
+import { page } from '@/app/chat/page';
 
 export default function Home() {
   const [user] = useAuthState(auth);
@@ -41,7 +42,7 @@ export default function Home() {
       <button onClick={handleLogout} className="p-2 bg-red-500 text-white rounded">
         Log out
       </button>
-      <div>Home</div>
+      <page/>
     </main>
   );
 }

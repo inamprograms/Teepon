@@ -1,0 +1,15 @@
+.sidebar{
+    border-right: solid 0.2rem gray;
+    height: 100vh;
+    max-width: 30rem;
+    width: 100%;
+    position: relative;
+
+    .close{
+        position: absolute;
+        right: 1rem;
+        top: 1rem;
+        font-size: 2.4rem;
+        cursor: pointer;
+    }
+}
