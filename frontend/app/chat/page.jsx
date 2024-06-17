@@ -7,7 +7,7 @@ import style from './chat.module.css'
 
 const index = () => {
 
-  const [hamburg, setHamburg] = useState(false)
+  const [hamburg, setHamburg] = useState(true)
 
   return (
     <>

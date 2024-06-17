@@ -5,6 +5,8 @@
     width: 100%;
     position: relative;
     transition: 0.25s;
+    display: flex;
+    flex-direction: column;
 
     .close{
         position: absolute;
@@ -14,6 +16,102 @@
         cursor: pointer;
         @media screen and (min-width: 1000px){
             display: none;
+        }
+    }
+
+    .upper_dock{
+
+        padding: 1.5rem 0rem;
+        width: 85%;
+        margin: 0 auto;
+        border-bottom: 0.1rem solid gray;
+
+        .outings{
+            font-size: 1.8rem;
+        }
+
+        .searchbar{
+            /* width: 80%; */
+            margin: 1rem auto;
+            max-width: 30rem;
+            border: 0.2rem solid gray;
+            border-radius: 0.7rem;
+            display: flex;
+            height: 3rem;
+
+            .search_icon{
+                height: 80%;
+                width: 1.5rem;
+                margin: auto;
+            }
+
+            .input{
+                width: 85%;
+                margin: auto;
+                margin-left: 0.1rem;
+            }
+            .input:focus{
+                outline: none;
+            }
+            
+        }
+    }
+
+    .middle_dock{
+        height: calc(100vh - 5rem);
+        margin: auto;
+        margin-top: 0;
+        width: 85%;
+        overflow: scroll;
+
+        .outings{
+            margin: 1rem auto;
+
+            .outing{
+                padding: 0.5rem 1rem;
+
+                .title{
+                    font-size: 1.3rem;
+                }
+
+                .desc{
+                    color: rgb(71, 71, 71);
+                }
+            }
+        }
+    }
+
+    .lower_dock{
+        height: 5rem;
+        width: 85%;
+        margin: 0 auto;
+        border-top: solid 0.1rem gray;
+        display: flex;
+
+        .profile{
+            width: 3rem;
+            background: gray;
+            aspect-ratio: 1;
+            border-radius: 50%;
+            margin: auto 0;
+        }
+
+        .new{
+            width: 5rem;
+            color: white;
+            background: black;
+            height: 2.7rem;
+            margin: auto;
+            margin-right: 0;
+            display: flex;
+            justify-content: center;
+            align-items: center;
+            border-radius: 0.7rem;
+
+            .svg{
+                margin-right: 0.3rem;
+            }
+
         }
     }
 }
