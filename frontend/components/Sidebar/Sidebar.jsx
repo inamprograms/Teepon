@@ -4,7 +4,7 @@ import { IoMdClose } from "react-icons/io";
 
 const Sidebar = ({hamburg, setHamburg}) => {
   return (
-    <div className={style.sidebar}>
+    <div className={`${style.sidebar} ${!hamburg ? style.hide : ''}`}>
       <div className={style.close} onClick={()=>{setHamburg(false)}}><IoMdClose /></div>
     </div>
   )

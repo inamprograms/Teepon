@@ -4,6 +4,7 @@
     max-width: 30rem;
     width: 100%;
     position: relative;
+    transition: 0.25s;
 
     .close{
         position: absolute;
@@ -11,5 +12,12 @@
         top: 1rem;
         font-size: 2.4rem;
         cursor: pointer;
+        @media screen and (min-width: 1000px){
+            display: none;
+        }
     }
+}
+
+.hide{
+    transform: translateX(-100%);
 }
