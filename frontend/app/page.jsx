@@ -5,7 +5,7 @@ import { useAuthState } from 'react-firebase-hooks/auth';
 import { auth } from '@/app/firebase/config';
 import { useRouter } from 'next/navigation';
 import { signOut } from 'firebase/auth';
-import { page } from '@/app/chat/page';
+
 
 export default function Home() {
   const [user] = useAuthState(auth);
