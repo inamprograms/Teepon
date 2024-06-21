@@ -71,7 +71,7 @@ const Sidebar = ({ hamburg, setHamburg }) => {
         </div>
         <div className="p-6 border-t border-gray-400 flex items-center justify-between bg-white">
           <div className="w-12 h-12 bg-gray-300 rounded-full"></div>
-          <button className="flex items-center justify-center px-4 py-2 bg-black text-white rounded-lg">
+          <button className="flex items-center justify-center px-4 py-2 bg-black text-white rounded-lg" onClick={()=>{router.push('/chat/new')}} >
             <FiPlus className="mr-2" /> New
           </button>
         </div>
