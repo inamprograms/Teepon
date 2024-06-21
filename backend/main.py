@@ -1,15 +1,18 @@
-from flask import Flask, request, flash
-import numpy as np
-from datetime import datetime
 from pymongo.mongo_client import MongoClient
-from __init__ import envs
-from io import BytesIO
-import base64
-from PIL import Image
-import json
+from flask import Flask, request, flash
 from bson.objectid import ObjectId
-import requests
+from dotenv import load_dotenv
+from datetime import datetime
+from io import BytesIO
+from PIL import Image
 
+import numpy as np
+import requests
+import base64
+import json
+import os
+
+load_dotenv()
 
 
 def connect():
@@ -17,7 +20,7 @@ def connect():
     """
     code for connecting to the cluster
     """
-    uri = envs['uri']
+    uri = os.getenv('connection_url')
 
     # Create a new client and connect to the server
     client = MongoClient(uri)
