@@ -1,118 +1,80 @@
-import React from "react";
-import style from "./sidebar.module.css";
+import React, { useState } from 'react';
 import { IoMdClose } from "react-icons/io";
 import { FiSearch, FiPlus } from "react-icons/fi";
-
+import { useRouter } from 'next/navigation';
+import { useDispatch } from 'react-redux';
+import { setCurrentRoom } from '@/store/ChatSlice';
 const Sidebar = ({ hamburg, setHamburg }) => {
+  const [searchInput, setSearchInput] = useState('');
+  const router = useRouter();
+  const dispatch = useDispatch();
   const outings = [
-    {
-      name: "Weekend Outings",
-      desc: "Weekend party near the hills",
-    },
-    {
-      name: "Weekend Outings",
-      desc: "Weekend party near the hills",
-    },
-    {
-      name: "Weekend Outings",
-      desc: "Weekend party near the hills",
-    },
-    {
-      name: "Weekend Outings",
-      desc: "Weekend party near the hills",
-    },
-    {
-      name: "Weekend Outings",
-      desc: "Weekend party near the hills",
-    },
-    {
-      name: "Weekend Outings",
-      desc: "Weekend party near the hills",
-    },
-    {
-      name: "Weekend Outings",
-      desc: "Weekend party near the hills",
-    },
-    {
-      name: "Weekend Outings",
-      desc: "Weekend party near the hills",
-    },
-    {
-      name: "Weekend Outings",
-      desc: "Weekend party near the hills",
-    },
-    {
-      name: "Weekend Outings",
-      desc: "Weekend party near the hills",
-    },
-    {
-      name: "Weekend Outings",
-      desc: "Weekend party near the hills",
-    },
-    {
-      name: "Weekend Outings",
-      desc: "Weekend party near the hills",
-    },
-    {
-      name: "Weekend Outings",
-      desc: "Weekend party near the hills",
-    },
-    {
-      name: "Weekend Outings",
-      desc: "Weekend party near the hills",
-    },
-    {
-      name: "Weekend Outings",
-      desc: "Weekend party near the hills",
-    },
-    {
-      name: "Weekend Outings",
-      desc: "Weekend party near the hills",
-    },
+    { name: 'Outing-1', desc: 'Weekend party near the hills' },
+    { name: 'Outing-2', desc: 'Weekend party near the hills' },
+    { name: 'Outing-3', desc: 'Weekend party near the hills' },
+    { name: 'Outing-4', desc: 'Weekend party near the hills' },
+    { name: 'Outing-5', desc: 'Weekend party near the hills' },
+    { name: 'Outing-6', desc: 'Weekend party near the hills' },
+    { name: 'Outing-7', desc: 'Weekend party near the hills' },
+    { name: 'Outing-8', desc: 'Weekend party near the hills' },
+    { name: 'Outing-9', desc: 'Weekend party near the hills' },
+    { name: 'Outing-10', desc: 'Weekend party near the hills' },
   ];
 
+  const handleRoomClick = (roomName) => {
+    setHamburg(false);
+    dispatch(setCurrentRoom(roomName));
+  
+    router.push(`/chat/${roomName}`);
+  };
+
+  const handleSearchChange = (e) => {
+    setSearchInput(e.target.value);
+  };
+
+  const filteredOutings = outings.filter((outing) =>
+    outing.name.toLowerCase().includes(searchInput.toLowerCase())
+  );
+
   return (
-    <div className={`${style.sidebar} ${!hamburg ? style.hide : ""}`}>
-      <div
-        className={style.close}
-        onClick={() => {
-          setHamburg(false);
-        }}
-      >
+    <div className={`fixed md:static top-0 left-0 h-full md:w-80 w-screen max-w-md bg-white border-r border-gray-400 transition-transform transform ${hamburg ? 'translate-x-0' : '-translate-x-full'} md:translate-x-0`}>
+      <div className="absolute top-4 right-4 text-3xl cursor-pointer md:hidden" onClick={() => setHamburg(false)}>
         <IoMdClose />
       </div>
-      <div className={style.upper_dock}>
-        <h1 className={style.outings}>Outings</h1>
-        <div className={style.searchbar}>
-          <FiSearch className={style.search_icon} />
-          <input
-            type="text"
-            name="search"
-            id="search"
-            className={style.input}
-            placeholder="Search"
-          />
+      <div className="flex flex-col h-full">
+        <div className="p-6 border-b border-gray-400">
+          <h1 className="text-xl mb-4">Outings</h1>
+          <div className="flex items-center border border-gray-400 rounded-lg overflow-hidden">
+            <FiSearch className="w-6 h-6 mx-2 text-gray-500" />
+            <input
+              type="text"
+              className="flex-1 p-2 focus:outline-none"
+              placeholder="Search"
+              value={searchInput}
+              onChange={handleSearchChange}
+            />
+          </div>
         </div>
-      </div>
-
-      <div className={style.middle_dock}>
-        <ul className={style.outings}>
-          {outings.map((item) => {
-            return (
-              <li className={style.outing}>
-                <div className={style.title}>{item.name}</div>
-                <div className={style.desc}>{item.desc}</div>
+        <div className="flex-1 overflow-y-auto p-6">
+          <ul className="space-y-4">
+            {filteredOutings.map((item, index) => (
+              <li
+                key={index}
+                className="p-4 bg-gray-100 rounded-lg shadow cursor-pointer"
+                onClick={() => handleRoomClick(item.name)}
+              >
+                <div className="text-lg">{item.name}</div>
+                <div className="text-gray-600">{item.desc}</div>
               </li>
-            );
-          })}
-        </ul>
-      </div>
-
-      <div className={style.lower_dock}>
-        <div className={style.profile}></div>
-        <button className={style.new}>
-          <FiPlus className={style.svg} /> New
-        </button>
+            ))}
+          </ul>
+        </div>
+        <div className="p-6 border-t border-gray-400 flex items-center justify-between bg-white">
+          <div className="w-12 h-12 bg-gray-300 rounded-full"></div>
+          <button className="flex items-center justify-center px-4 py-2 bg-black text-white rounded-lg">
+            <FiPlus className="mr-2" /> New
+          </button>
+        </div>
       </div>
     </div>
   );
