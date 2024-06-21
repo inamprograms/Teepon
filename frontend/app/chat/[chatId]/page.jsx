@@ -1,7 +1,7 @@
 'use client';
 
 import React, { useState, useEffect } from 'react';
-import { useParams, useRouter } from 'next/navigation';
+import { useParams } from 'next/navigation';
 import { useSelector, useDispatch } from 'react-redux';
 import { connectSocket, disconnectSocket, sendMessage, joinRoom } from '@/services/socketService';
 import { setCurrentRoom } from '@/store/ChatSlice';
@@ -12,7 +12,7 @@ import ChatLayout from '@/components/ChatLayout';
 
 const ChatRoom = () => {
   const { chatId } = useParams(); // use useParams to get the dynamic route parameter
-  const router = useRouter();
+ 
   const [messageInput, setMessageInput] = useState('');
   const messages = useSelector((state) => state.chat.messages);
   const currentRoom = useSelector((state) => state.chat.currentRoom);
@@ -56,8 +56,8 @@ const ChatRoom = () => {
       <ChatLayout>
         {currentRoom && (
           <>
-            <header className="bg-gray-800 text-white p-4 flex justify-between items-center">
-              <div className="text-lg">{currentRoom}</div>
+            <header className="bg-gray-200 text-white p-4 flex justify-between items-center">
+              <div className="text-lg pl-10 text-black">{currentRoom}</div>
             </header>
             <main className="flex-1 overflow-y-auto flex flex-col-reverse bg-gray-100 p-4">
               <ChatWindow messages={messages} />
