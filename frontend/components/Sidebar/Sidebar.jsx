@@ -1,9 +1,14 @@
+
 import React, { useState } from 'react';
 import { IoMdClose } from "react-icons/io";
 import { FiSearch, FiPlus } from "react-icons/fi";
-
-const Sidebar = ({ hamburg, setHamburg, onRoomSelect }) => {
-  const [searchInput, setSearchInput] = useState(''); // State to track search input
+import { useRouter } from 'next/navigation';
+import { useDispatch } from 'react-redux';
+import { setCurrentRoom } from '@/store/ChatSlice';
+const Sidebar = ({ hamburg, setHamburg }) => {
+  const [searchInput, setSearchInput] = useState('');
+  const router = useRouter();
+  const dispatch = useDispatch();
   const outings = [
     { name: 'Outing-1', desc: 'Weekend party near the hills' },
     { name: 'Outing-2', desc: 'Weekend party near the hills' },
@@ -18,8 +23,10 @@ const Sidebar = ({ hamburg, setHamburg, onRoomSelect }) => {
   ];
 
   const handleRoomClick = (roomName) => {
-    onRoomSelect(roomName);
     setHamburg(false);
+    dispatch(setCurrentRoom(roomName));
+  
+    router.push(`/chat/${roomName}`);
   };
 
   const handleSearchChange = (e) => {
