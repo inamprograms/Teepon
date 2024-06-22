@@ -1,0 +1,3 @@
+[submodule "backend/Synapse-Copilot"]
+	path = backend/Synapse-Copilot
+	url = https://github.com/Agile-Loop/Synapse-Copilot.git
