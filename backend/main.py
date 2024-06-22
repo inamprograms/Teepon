@@ -108,7 +108,7 @@ def get_role():
             return jsonify({"error": "Invalid request payload"}), 400
 
         uid = req['uid']
-        result = db.find_one({"userid": uid})
+        result = db.find_one({"user_id": uid})
         if not result:
             return jsonify({"error": "User not found"}), 404
 
