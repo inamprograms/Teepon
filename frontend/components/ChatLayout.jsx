@@ -20,7 +20,7 @@ const ChatLayout = ({ children }) => {
       <Sidebar hamburg={hamburg} setHamburg={setHamburg} />
 
       {/* Main Content */}
-      <div className="flex-1 flex flex-col">
+      <div className="flex-1 flex flex-col relative">
         {children}
       </div>
     </section>

@@ -28,6 +28,7 @@ build/
 # Ignore system files
 .DS_Store
 Thumbs.db
+./frontend/pnpm-lock.yaml
 
 # Ignore environment variables file
 .env
