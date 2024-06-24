@@ -1,5 +1,5 @@
 import './globals.css';
-import ClientProvider from '@/app/ClientProvider';
+import ClientProvider from '@/app/ClientProvider'; 
 
 export const metadata = {
   title: 'Create Next App',

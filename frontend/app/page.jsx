@@ -3,7 +3,7 @@
 import React from 'react';
 import { useAuthState } from 'react-firebase-hooks/auth';
 import { auth } from '@/services/firebase/config';
-import { useRouter } from 'next/navigation'; // Correct hook for App Router
+import { useRouter } from 'next/navigation'; 
 import { signOut } from 'firebase/auth';
 
 import ProtectedRoute from '@/components/ProtectedRoute';

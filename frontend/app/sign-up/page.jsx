@@ -42,7 +42,8 @@ const SignUp = () => {
     setError('');
     try {
       const res = await createUserWithEmailAndPassword(email, password);
-      console.log({ res });
+      console.log('from sigup',{ res });
+     
       sessionStorage.setItem('user', true);
       dispatch(setUser(username)); // Store user information including username to Redux
       setEmail('');

@@ -1,9 +1,11 @@
-'use client'
+'use client';
 
 import { useState } from 'react';
 import { useSignInWithEmailAndPassword } from 'react-firebase-hooks/auth';
-import { auth } from '@/services/firebase/config';
+import { auth, googleProvider } from '@/services/firebase/config';
 import { useRouter } from 'next/navigation';
+import { FcGoogle } from 'react-icons/fc';
+import { signInWithPopup } from 'firebase/auth';
 
 const SignIn = () => {
   const [email, setEmail] = useState('');
@@ -28,6 +30,21 @@ const SignIn = () => {
     }
   };
 
+  const handleGoogleSignIn = async () => {
+    try {
+      const res = await signInWithPopup(auth, googleProvider);
+      if (res) {
+        console.log({ res });
+        sessionStorage.setItem('user', true);
+        router.push('/');
+      } else {
+        console.error('Google authentication failed');
+      }
+    } catch (e) {
+      console.error('Google sign-in error:', e);
+    }
+  };
+
   return (
     <div className="min-h-screen flex items-center justify-center bg-gray-900">
       <div className="bg-gray-800 p-10 rounded-lg shadow-xl w-96">
@@ -47,7 +64,7 @@ const SignIn = () => {
           onChange={(e) => setPassword(e.target.value)}
           className="w-full p-3 mb-4 bg-gray-700 rounded outline-none text-white placeholder-gray-500"
         />
-        <div className='flex gap-4'>
+        <div className='flex gap-4 mb-4'>
           <button
             onClick={handleSignIn}
             className="w-full p-3 bg-indigo-600 rounded text-white hover:bg-indigo-500"
@@ -61,6 +78,13 @@ const SignIn = () => {
             Sign Up
           </button>
         </div>
+        <button
+          onClick={handleGoogleSignIn}
+          className="w-full p-3 bg-white rounded text-gray-700 hover:bg-gray-200 flex items-center justify-center gap-2"
+        >
+          <FcGoogle size={24} />
+          Sign in with Google
+        </button>
       </div>
     </div>
   );
