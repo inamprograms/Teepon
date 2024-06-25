@@ -5,7 +5,7 @@ import { useSignInWithEmailAndPassword } from 'react-firebase-hooks/auth';
 import { auth, googleProvider } from '@/services/firebase/config';
 import { useRouter } from 'next/navigation';
 import { FcGoogle } from 'react-icons/fc';
-import { signInWithPopup } from 'firebase/auth';
+import { signInWithPopup, GoogleAuthProvider } from 'firebase/auth';
 
 const SignIn = () => {
   const [email, setEmail] = useState('');
@@ -32,7 +32,14 @@ const SignIn = () => {
 
   const handleGoogleSignIn = async () => {
     try {
-      const res = await signInWithPopup(auth, googleProvider);
+      const provider = new GoogleAuthProvider()
+      provider.addScope('https://www.googleapis.com/auth/calendar.events.readonly')
+      const res = await signInWithPopup(auth, provider)
+      .then((result) => {
+        // This gives you a Google Access Token. You can use it to access the Google API.
+        const credential = GoogleAuthProvider.credentialFromResult(result);
+        console.log(credential);
+      })
       if (res) {
         console.log({ res });
         sessionStorage.setItem('user', true);
