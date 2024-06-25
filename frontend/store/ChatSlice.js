@@ -6,6 +6,7 @@ const initialState = {
   currentRoom: "",
   socketId: "",
   user: null,
+  server_url: "http://localhost:10000/api",
 };
 
 const chatSlice = createSlice({
@@ -18,20 +19,9 @@ const chatSlice = createSlice({
     },
     setCurrentRoom: (state, action) => {
       state.currentRoom = action.payload;
-      state.messages = [
-        {
-          message: "Heyy",
-          sender: "TKGScD6CJ0UVa68fqDxcOwhKgCG2",
-        },
-        {
-          message: "Heyya",
-          sender: "u7edLAPi1sM3prNG1mdQ30OnwUF2",
-        },
-        {
-          message: "Heyy",
-          sender: "pmiL0tXbwTZV8vNCCbqJEwl5PoI3",
-        },
-      ];
+    },
+    setCurrentMessages: (state, action) => {
+      state.messages = action.payload;
     },
     setSocketId: (state, action) => {
       state.socketId = action.payload;
@@ -46,7 +36,7 @@ const chatSlice = createSlice({
   },
 });
 
-export const { addMessage, setCurrentRoom, setSocketId, setUser, clearUser } =
+export const { addMessage, setCurrentRoom, setSocketId, setUser, clearUser, setCurrentMessages, server_url } =
   chatSlice.actions;
 
 export default chatSlice.reducer;

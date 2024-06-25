@@ -18,10 +18,6 @@ export const connectSocket = () => {
    
 });
 
-// socket.on('message', (message) => {
-//   store.dispatch(addMessage(message));
-// });
-
   return socket;
 };
 

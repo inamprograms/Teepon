@@ -27,6 +27,7 @@ const ChatRoom = () => {
   const currentRoom = useSelector((state) => state.chat.currentRoom);
   const dispatch = useDispatch();
   const currentuser = useSelector((state) => state.chat.user);
+  const server_url = useSelector(state => state.chat.server_url)
 
   useEffect(() => {
     connectSocket();
@@ -48,6 +49,24 @@ const ChatRoom = () => {
     e.preventDefault();
     sendMessage(messageInput, currentRoom, currentuser);
     setMessageInput("");
+    
+    fetch(`${server_url}/chat/add`, {
+      method: "POST",
+      headers: {
+        "Content-Type": "application/json",
+      },
+      body: JSON.stringify(
+        {
+          "oid": currentRoom,
+          "token": "0authtoken here",
+          "message": {
+            sender: currentuser,
+            message: messageInput
+          }
+        }
+      ),
+    })
+    
   };
 
   const handleKeyPress = (e) => {

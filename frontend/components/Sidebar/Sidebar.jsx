@@ -1,30 +1,56 @@
-import React, { useState } from 'react';
+import React, { useState } from "react";
 import { IoMdClose } from "react-icons/io";
 import { FiSearch, FiPlus } from "react-icons/fi";
-import { useRouter } from 'next/navigation';
-import { useDispatch } from 'react-redux';
-import { setCurrentRoom } from '@/store/ChatSlice';
+import { useRouter } from "next/navigation";
+import { useDispatch, useSelector } from "react-redux";
+import {
+  setCurrentRoom,
+  setCurrentMessages,
+  server_url,
+} from "@/store/ChatSlice";
 const Sidebar = ({ hamburg, setHamburg }) => {
-  const [searchInput, setSearchInput] = useState('');
+  const [searchInput, setSearchInput] = useState("");
   const router = useRouter();
+  const messages = useSelector((state) => state.chat.messages);
   const dispatch = useDispatch();
+  const server_url = useSelector((state) => state.chat.server_url);
   const outings = [
-    { name: 'Outing-1', desc: 'Weekend party near the hills' },
-    { name: 'Outing-2', desc: 'Weekend party near the hills' },
-    { name: 'Outing-3', desc: 'Weekend party near the hills' },
-    { name: 'Outing-4', desc: 'Weekend party near the hills' },
-    { name: 'Outing-5', desc: 'Weekend party near the hills' },
-    { name: 'Outing-6', desc: 'Weekend party near the hills' },
-    { name: 'Outing-7', desc: 'Weekend party near the hills' },
-    { name: 'Outing-8', desc: 'Weekend party near the hills' },
-    { name: 'Outing-9', desc: 'Weekend party near the hills' },
-    { name: 'Outing-10', desc: 'Weekend party near the hills' },
+    { name: "Outing-1", desc: "Weekend party near the hills" },
+    { name: "Outing-2", desc: "Weekend party near the hills" },
+    { name: "Outing-3", desc: "Weekend party near the hills" },
+    { name: "Outing-4", desc: "Weekend party near the hills" },
+    { name: "Outing-5", desc: "Weekend party near the hills" },
+    { name: "Outing-6", desc: "Weekend party near the hills" },
+    { name: "Outing-7", desc: "Weekend party near the hills" },
+    { name: "Outing-8", desc: "Weekend party near the hills" },
+    { name: "Outing-9", desc: "Weekend party near the hills" },
+    { name: "Outing-10", desc: "Weekend party near the hills" },
   ];
 
-  const handleRoomClick = (roomName) => {
+  const handleRoomClick = async (roomName) => {
+    // const data = [
+    //   { message: 'Hello', sender: 'user' },
+    //   { message: 'Hi', sender: 'friend' },
+    // ];
+
+    console.log(messages);
+    // post message
+
+    const data = await fetch(`${server_url}/chats`, {
+      method: "POST",
+      headers: {
+        "Content-Type": "application/json",
+      },
+      body: JSON.stringify({
+        oid: roomName,
+      }),
+    })
+      .then((res) => res.json())
+      .then((e) => {dispatch(setCurrentMessages(e)); console.log(e);});
+
     setHamburg(false);
     dispatch(setCurrentRoom(roomName));
-  
+
     router.push(`/chat/${roomName}`);
   };
 
@@ -37,8 +63,15 @@ const Sidebar = ({ hamburg, setHamburg }) => {
   );
 
   return (
-    <div className={`fixed md:static top-0 left-0 h-full md:w-80 w-screen max-w-md bg-white border-r border-gray-400 transition-transform transform ${hamburg ? 'translate-x-0' : '-translate-x-full'} md:translate-x-0`}>
-      <div className="absolute top-4 right-4 text-3xl cursor-pointer md:hidden" onClick={() => setHamburg(false)}>
+    <div
+      className={`fixed md:static top-0 left-0 h-full md:w-80 w-screen max-w-md bg-white border-r border-gray-400 transition-transform transform ${
+        hamburg ? "translate-x-0" : "-translate-x-full"
+      } md:translate-x-0`}
+    >
+      <div
+        className="absolute top-4 right-4 text-3xl cursor-pointer md:hidden"
+        onClick={() => setHamburg(false)}
+      >
         <IoMdClose />
       </div>
       <div className="flex flex-col h-full">
@@ -70,8 +103,18 @@ const Sidebar = ({ hamburg, setHamburg }) => {
           </ul>
         </div>
         <div className="p-6 border-t border-gray-400 flex items-center justify-between bg-white">
-          <div className="w-12 h-12 bg-gray-300 rounded-full" onClick={()=>{router.push('/profile')}} ></div>
-          <button className="flex items-center justify-center px-4 py-2 bg-black text-white rounded-lg" onClick={()=>{router.push('/chat/new')}} >
+          <div
+            className="w-12 h-12 bg-gray-300 rounded-full"
+            onClick={() => {
+              router.push("/profile");
+            }}
+          ></div>
+          <button
+            className="flex items-center justify-center px-4 py-2 bg-black text-white rounded-lg"
+            onClick={() => {
+              router.push("/chat/new");
+            }}
+          >
             <FiPlus className="mr-2" /> New
           </button>
         </div>

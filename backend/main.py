@@ -1,5 +1,6 @@
 from pymongo.mongo_client import MongoClient
 from flask import Flask, request, jsonify
+from flask_cors import CORS, cross_origin
 from bson.objectid import ObjectId
 from bson.json_util import dumps
 from bson.json_util import loads
@@ -13,8 +14,13 @@ import base64
 import json
 import os
 from routes import routes_bp
+from pprint import pprint
 
 load_dotenv()
+
+#   res.header("Access-Control-Allow-Origin", "*");
+#     res.header("Access-Control-Allow-Methods", "GET,HEAD,OPTIONS,POST,PUT,DELETE");
+#     res.header("Access-Control-Allow-Headers", "Origin, X-Requested-With, Content-Type, Accept, Authorization");
 
 
 def connect():
@@ -40,6 +46,8 @@ def connect():
 
 
 app = Flask(__name__)
+cors = CORS(app)
+app.config['CORS_HEADERS'] = 'Content-Type'
 client = connect()
 
 
@@ -72,6 +80,7 @@ def add_user():
 
 # Chat Routes
 @app.route('/api/chats', methods=['POST'])
+@cross_origin()
 def get_chats():
     db = client.test.chats
     
@@ -83,12 +92,19 @@ def get_chats():
     # token = req['token']
     
     result = db.find({"oid":oid})
-    if not result:
-        return jsonify({"error": "Chat not found"}), 404
+    
+    # print(result.count())
+    # if len(list(result)) == 0:
+    #     return jsonify([]), 404
     # if result.token != token:
     #     return jsonify({"error": "Unauthorized access"}), 401
     
-    return loads(json.dumps(list(result), default=str))
+    dict = list(result)
+    
+    if len(dict) == 0:
+        return jsonify([])
+    else:
+        return loads(json.dumps(dict[0]['messages'], default=str))
 
 @app.route('/api/chat/add', methods=['POST'])
 def add_chat():

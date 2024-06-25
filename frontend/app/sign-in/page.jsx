@@ -39,14 +39,12 @@ const SignIn = () => {
         // This gives you a Google Access Token. You can use it to access the Google API.
         const credential = GoogleAuthProvider.credentialFromResult(result);
         console.log(credential);
-      })
-      if (res) {
-        console.log({ res });
+        console.log({ result });
         sessionStorage.setItem('user', true);
         router.push('/');
-      } else {
+      }).catch((e)=> {
         console.error('Google authentication failed');
-      }
+      })
     } catch (e) {
       console.error('Google sign-in error:', e);
     }

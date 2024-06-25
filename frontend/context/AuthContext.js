@@ -16,7 +16,8 @@ export function AuthProvider({ children }) {
     const unsubscribe = onAuthStateChanged(auth, (user) => { 
       if (user) {
         console.log(user)
-        dispatch(setUser(user.uid));
+        dispatch(setUser(user.email));
+
       } else {
         dispatch(clearUser());
       }
