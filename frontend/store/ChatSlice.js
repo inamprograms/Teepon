@@ -7,6 +7,7 @@ const initialState = {
   socketId: "",
   user: null,
   server_url: "http://localhost:10000/api",
+  userdata:null
 };
 
 const chatSlice = createSlice({
@@ -28,15 +29,19 @@ const chatSlice = createSlice({
     },
     setUser: (state, action) => {
       state.user = action.payload;
-      console.log("from redux,", action.payload);
+     // console.log("from redux,", action.payload);
     },
     clearUser: (state) => {
       state.user = null;
     },
+    setUserdata: (state, action) => {
+      state.userdata = action.payload;
+      console.log("from redux,", action.payload);
+    },
   },
 });
 
-export const { addMessage, setCurrentRoom, setSocketId, setUser, clearUser, setCurrentMessages, server_url } =
+export const { addMessage,setUserdata, setCurrentRoom, setSocketId, setUser, clearUser, setCurrentMessages, server_url } =
   chatSlice.actions;
 
 export default chatSlice.reducer;

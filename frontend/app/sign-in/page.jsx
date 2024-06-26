@@ -30,7 +30,7 @@ const SignIn = () => {
     }
   };
 
-  const handleGoogleSignIn = async () => {
+  const  handleGoogleSignIn = async () => {
     try {
       const provider = new GoogleAuthProvider()
       provider.addScope('https://www.googleapis.com/auth/calendar.events.readonly')
@@ -53,7 +53,9 @@ const SignIn = () => {
   return (
     <div className="min-h-screen flex items-center justify-center bg-gray-900">
       <div className="bg-gray-800 p-10 rounded-lg shadow-xl w-96">
-        <h1 className="text-white text-2xl mb-5">Sign In</h1>
+      <h1 className="text-white text-3xl mb-5 font-semibold text-center tracking-wider font-sans ">
+          Sign In
+        </h1>
         {error && <p className="text-red-500 mb-5">{error.message}</p>}
         <input
           type="email"
@@ -69,19 +71,19 @@ const SignIn = () => {
           onChange={(e) => setPassword(e.target.value)}
           className="w-full p-3 mb-4 bg-gray-700 rounded outline-none text-white placeholder-gray-500"
         />
-        <div className='flex gap-4 mb-4'>
+        <div className='flex gap-4 mb-4 '>
           <button
-            onClick={handleSignIn}
-            className="w-full p-3 bg-indigo-600 rounded text-white hover:bg-indigo-500"
+            onClick={handleGoogleSignIn}
+            className="  w-full p-3 bg-indigo-600 rounded text-white hover:bg-indigo-500"
           >
             Sign In
           </button>
-          <button
+          {/* <button
             onClick={() => router.push('/sign-up')}
             className="w-full p-3 bg-indigo-600 rounded text-white hover:bg-indigo-500"
           >
             Sign Up
-          </button>
+          </button> */}
         </div>
         <button
           onClick={handleGoogleSignIn}

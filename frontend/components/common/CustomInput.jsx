@@ -3,20 +3,16 @@ import React from 'react';
 
 const CustomInput = ({ inputType, label, value, onChange, disabled }) => {
   return (
-    <div className="flex items-center justify-between gap-4 w-full">
-      <label htmlFor={label} className="font-medium text-sm">
-        {label}
-      </label>
-      <input
-        type={inputType}
-        id={label.toLowerCase()}
-        className={`border ${disabled ? 'border-transparent' : 'border-gray-300'}
-          rounded-lg w-full px-3 py-2 mt-1 focus:outline-none focus:ring-2 focus:ring-gray-200`}
-        value={value}
-        onChange={onChange}
-        disabled={disabled}
-      />
-    </div>
+    <div className="mb-4">
+    <label className="block text-gray-700 text-sm font-bold mb-2">{label}</label>
+    <input
+      type={inputType}
+      value={value}
+      onChange={onChange}
+      disabled={disabled}
+      className={`shadow appearance-none border rounded w-full py-2 px-3 text-gray-700 leading-tight focus:outline-none focus:shadow-outline ${disabled ? 'bg-gray-100' : 'bg-white'}`}
+    />
+  </div>
   );
 };
 
