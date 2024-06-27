@@ -12,8 +12,6 @@ echo "Apply migrations"
 flask db upgrade
 echo "Done - 3"
 
-
-
 # Start server
 echo "Starting app"
 flask run --host=0.0.0.0 --port=5000
