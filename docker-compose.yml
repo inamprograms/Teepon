@@ -1,27 +1,37 @@
 version: "3.8"
 
 services:
+  backend:
+    build: ./backend
+    ports:
+      - 5000:5000
+    command: ./wait-for-it.sh mysql:3306 -- ./docker-entrypoint.sh
+    environment:
+      - MYSQL_HOST=${MYSQL_HOST}
+      - MYSQL_DATABASE=${MYSQL_DATABASE}
+      - MYSQL_USER=${MYSQL_USER}
+      - MYSQL_PASSWORD=${MYSQL_PASSWORD}
+    volumes:
+      - setup-data:/app/setup
   mysql:
     image: mysql:latest
     container_name: mysql
-    environment:
-      - MYSQL_DATABASE=teepon
-      - MYSQL_ROOT_PASSWORD=rUb1c()n
+    depends_on:
+      - backend
     ports:
       - "3306:3306"
+    environment:
+      MYSQL_ROOT_PASSWORD: ${MYSQL_PASSWORD}
+      MYSQL_DATABASE: ${MYSQL_DATABASE}
     volumes:
-      - mysql-data:/var/lib/mysql
+      - mysql-data:/var/lib/docker
+      - setup-data:/docker-entrypoint-initdb.d
   frontend:
     depends_on: 
       - backend
     build: ./frontend
     ports:
       - 3000:3000
-
-  backend:
-    build: ./backend
-    ports: 
-      - 5000:5000
-    command: ./docker-entrypoint.sh
 volumes:
   mysql-data:
+  setup-data:
