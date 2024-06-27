@@ -11,6 +11,15 @@ services:
       MYSQL_DATABASE: ${MYSQL_DATABASE}
     volumes:
       - mysql-data:/var/lib/mysql
+  phpmyadmin:
+    image: phpmyadmin/phpmyadmin:5
+    #networks:
+    #  - trd
+    ports:
+      - 8080:80
+    environment:
+      PMA_HOST: mysql
+      PMA_PORT: 3306
   backend:
     build: ./backend
     ports:
