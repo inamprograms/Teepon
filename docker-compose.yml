@@ -1,15 +1,42 @@
 version: "3.8"
 
 services:
+  mysql:
+    image: mysql:latest
+    container_name: mysql
+    ports:
+      - "3306:3306"
+    environment:
+      MYSQL_ROOT_PASSWORD: ${MYSQL_PASSWORD}
+      MYSQL_DATABASE: ${MYSQL_DATABASE}
+    volumes:
+      - mysql-data:/var/lib/mysql
+  phpmyadmin:
+    image: phpmyadmin/phpmyadmin:5
+    #networks:
+    #  - trd
+    ports:
+      - 8080:80
+    environment:
+      PMA_HOST: mysql
+      PMA_PORT: 3306
+  backend:
+    build: ./backend
+    ports:
+      - 5000:5000
+    depends_on:
+      - mysql
+    command: ./wait-for-it.sh mysql:3306 -- ./docker-entrypoint.sh
+    environment:
+      - MYSQL_HOST=${MYSQL_HOST}
+      - MYSQL_DATABASE=${MYSQL_DATABASE}
+      - MYSQL_USER=${MYSQL_USER}
+      - MYSQL_PASSWORD=${MYSQL_PASSWORD}
   frontend:
     depends_on: 
       - backend
     build: ./frontend
     ports:
       - 3000:3000
-
-  backend:
-    build: ./backend
-    ports: 
-      - 5000:5000
-    command: ./docker-entrypoint.sh
+volumes:
+  mysql-data:
