@@ -14,6 +14,7 @@ const Sidebar = ({ hamburg, setHamburg }) => {
   const messages = useSelector((state) => state.chat.messages);
   const dispatch = useDispatch();
   const server_url = useSelector((state) => state.chat.server_url);
+  const userdata = useSelector((state) => state.chat.userdata);
   const outings = [
     { name: "Outing-1", desc: "Weekend party near the hills" },
     { name: "Outing-2", desc: "Weekend party near the hills" },
@@ -61,10 +62,10 @@ const Sidebar = ({ hamburg, setHamburg }) => {
   const filteredOutings = outings.filter((outing) =>
     outing.name.toLowerCase().includes(searchInput.toLowerCase())
   );
-
+  const photoURL = userdata?.photoURL || 'default-image-url.jpg';
   return (
     <div
-      className={`fixed md:static top-0 left-0 h-full md:w-80 w-screen max-w-md bg-white border-r border-gray-400 transition-transform transform ${
+      className={`fixed md:static top-0 left-0 h-full z-10 md:w-80 w-screen max-w-md bg-white border-r border-gray-400 transition-transform transform ${
         hamburg ? "translate-x-0" : "-translate-x-full"
       } md:translate-x-0`}
     >
@@ -103,8 +104,9 @@ const Sidebar = ({ hamburg, setHamburg }) => {
           </ul>
         </div>
         <div className="p-6 border-t border-gray-400 flex items-center justify-between bg-white">
-          <div
-            className="w-12 h-12 bg-gray-300 rounded-full"
+        <div
+            className="w-12 h-12 bg-gray-300 rounded-full bg-cover bg-center"
+            style={{ backgroundImage: `url(${photoURL})` }}
             onClick={() => {
               router.push("/profile");
             }}

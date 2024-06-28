@@ -3,7 +3,7 @@ import React, { createContext, useContext, useEffect, useState } from 'react';
 import { onAuthStateChanged } from 'firebase/auth';
 import { auth } from '@/services/firebase/config';
 import { useDispatch } from 'react-redux';
-import { setUser, clearUser } from '@/store/ChatSlice';
+import { setUser, clearUser, setUserdata } from '@/store/ChatSlice';
 import Loader from '@/components/Loader';
 
 const AuthContext = createContext();
@@ -17,6 +17,7 @@ export function AuthProvider({ children }) {
       if (user) {
         console.log(user)
         dispatch(setUser(user.email));
+        dispatch(setUserdata(user));
 
       } else {
         dispatch(clearUser());
