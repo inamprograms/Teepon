@@ -1,16 +1,20 @@
 #!/bin/bash
-# Make migrations folder
-echo "Make migrations folder"
-flask db init
-echo "Done - 1"
+#Make migrations folder
+#echo "Make migrations folder"
+#flask db init || true
+#echo "Done - 1"
+#
+#echo "Make migrations"
+#flask db migrate -m "1"
+#echo "Done - 2"
+#
+#echo "Apply migrations"
+#flask db upgrade
+#echo "Done - 3"
 
 echo "Make migrations"
-flask db migrate -m "First migration"
-echo "Done - 2"
-
-echo "Apply migrations"
-flask db upgrade
-echo "Done - 3"
+./generate_migration.sh
+echo "Done"
 
 # Start server
 echo "Starting app"
