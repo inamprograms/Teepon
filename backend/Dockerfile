@@ -22,6 +22,7 @@ RUN poetry config virtualenvs.create false \
 COPY . /application/
 
 RUN chmod +x docker-entrypoint.sh
+RUN chmod +x generate_migration.sh
 RUN chmod +x setup.sql
 # Expose port 5000 on the container
 EXPOSE 5000
