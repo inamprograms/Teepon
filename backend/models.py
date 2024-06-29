@@ -5,6 +5,7 @@ import uuid
 class User(db.Model):
     id = db.Column(db.Integer, primary_key=True)
     uid = db.Column(db.String(36), unique=True, nullable=False, default=str(uuid.uuid4()))
+    email = db.Column(db.String(120), unique=True, nullable=False)
 
     def __repr__(self):
         return f'<User {self.id}, Associate {self.associate_user}>'
@@ -31,7 +32,7 @@ class User(db.Model):
 class Credentials(db.Model):
     id = db.Column(db.Integer, primary_key=True)
     user_id = db.Column(db.Integer, db.ForeignKey('user.id'), nullable=False)
-    google_api_key = db.Column(db.String(256), nullable=False)
+    google_api_key = db.Column(db.String(512), nullable=False)
 
     user = db.relationship('User', backref=db.backref('credentials', lazy=True))
 
