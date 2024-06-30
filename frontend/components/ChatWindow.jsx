@@ -8,7 +8,7 @@ const ChatWindow = ({ messages}) => {
       messagesEndRef.current.scrollIntoView({ behavior: 'smooth' });
     }
   }, [messages]);
-  console.log('user',currentuser.uid)
+  console.log('user',currentuser)
   console.log('user has',messages)
   return (
     <div className="w-full overflow-x-auto">
@@ -18,9 +18,9 @@ const ChatWindow = ({ messages}) => {
           {messages.map((message, index) => (
             <div
               key={index}
-              className={`flex justify-start items-start gap-2 ${message.sender === currentuser.uid ? 'justify-end' : 'justify-start'}`}
+              className={`flex justify-start items-start gap-2 ${message.sender === currentuser ? 'justify-end' : 'justify-start'}`}
             >
-              {message.sender === currentuser.uid? (
+              {message.sender === currentuser? (
                 
                 <div className="flex items-center gap-2 justify-end">
                   <div className={`p-2 max-w-xs bg-black text-white rounded-br-none rounded-lg break-words`}>
