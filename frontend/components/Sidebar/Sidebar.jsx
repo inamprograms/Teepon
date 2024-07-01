@@ -1,4 +1,4 @@
-import React, { useState } from "react";
+import React, { useEffect, useState } from "react";
 import { IoMdClose } from "react-icons/io";
 import { FiSearch, FiPlus } from "react-icons/fi";
 import { useRouter } from "next/navigation";
@@ -15,18 +15,7 @@ const Sidebar = ({ hamburg, setHamburg }) => {
   const dispatch = useDispatch();
   const server_url = useSelector((state) => state.chat.server_url);
   const userdata = useSelector((state) => state.chat.userdata);
-  const outings = [
-    { name: "Outing-1", desc: "Weekend party near the hills" },
-    { name: "Outing-2", desc: "Weekend party near the hills" },
-    { name: "Outing-3", desc: "Weekend party near the hills" },
-    { name: "Outing-4", desc: "Weekend party near the hills" },
-    { name: "Outing-5", desc: "Weekend party near the hills" },
-    { name: "Outing-6", desc: "Weekend party near the hills" },
-    { name: "Outing-7", desc: "Weekend party near the hills" },
-    { name: "Outing-8", desc: "Weekend party near the hills" },
-    { name: "Outing-9", desc: "Weekend party near the hills" },
-    { name: "Outing-10", desc: "Weekend party near the hills" },
-  ];
+  const [outings, setOutings] = useState([])
 
   const handleRoomClick = async (roomName) => {
     // const data = [
@@ -38,13 +27,11 @@ const Sidebar = ({ hamburg, setHamburg }) => {
     // post message
 
     const data = await fetch(`${server_url}/chats`, {
-      method: "POST",
+      method: "GET",
       headers: {
         "Content-Type": "application/json",
+        "oid" : roomName
       },
-      body: JSON.stringify({
-        oid: roomName,
-      }),
     })
       .then((res) => res.json())
       .then((e) => {dispatch(setCurrentMessages(e)); console.log(e);});
@@ -60,9 +47,24 @@ const Sidebar = ({ hamburg, setHamburg }) => {
   };
 
   const filteredOutings = outings.filter((outing) =>
-    outing.name.toLowerCase().includes(searchInput.toLowerCase())
+    outing?.toLowerCase().includes(searchInput.toLowerCase())
   );
   const photoURL = userdata?.photoURL || 'default-image-url.jpg';
+
+  useEffect(()=>{
+    fetch(`${server_url}/list_outings`,{
+      method: 'GET',
+      headers: {
+        'Content-Type': 'application/json',
+        'email': userdata.email
+      }
+    }).then((res)=>res.json()).then((data)=>{
+      setOutings(data[0]?.outings);
+    })
+    // console.log(userdata.email);
+  },[])
+
+
   return (
     <div
       className={`fixed md:static top-0 left-0 h-full z-10 md:w-80 w-screen max-w-md bg-white border-r border-gray-400 transition-transform transform ${
@@ -95,10 +97,10 @@ const Sidebar = ({ hamburg, setHamburg }) => {
               <li
                 key={index}
                 className="p-4 bg-gray-100 rounded-lg shadow cursor-pointer"
-                onClick={() => handleRoomClick(item.name)}
+                onClick={() => handleRoomClick(item)}
               >
-                <div className="text-lg">{item.name}</div>
-                <div className="text-gray-600">{item.desc}</div>
+                <div className="text-lg">{item}</div>
+                {/* <div className="text-gray-600">{'item.desc'}</div> */}
               </li>
             ))}
           </ul>

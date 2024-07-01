@@ -6,7 +6,7 @@ const initialState = {
   currentRoom: "",
   socketId: "",
   user: null,
-  server_url: "http://localhost:10000/api",
+  server_url: "http://localhost:5001/api",
   userdata:null
 };
 

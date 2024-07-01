@@ -50,7 +50,7 @@ const ChatRoom = () => {
     sendMessage(messageInput, currentRoom, currentuser);
     setMessageInput("");
     
-    fetch(`${server_url}/chat/add`, {
+    fetch(`${server_url}/chats`, {
       method: "POST",
       headers: {
         "Content-Type": "application/json",
