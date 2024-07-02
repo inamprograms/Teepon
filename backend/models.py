@@ -8,6 +8,8 @@ class User(db.Model):
     email = db.Column(db.String(120), unique=True, nullable=False)
     display_name = db.Column(db.String(120), nullable=False)
     refresh_token = db.Column(db.String(512), nullable=True)
+    access_token = db.Column(db.String(512), nullable=True)
+    active = db.Column(db.Boolean, default=True, nullable=False)
 
     def __repr__(self):
         return f'<User {self.display_name} with following id {self.id} and following firebase id {self.uid} is associated with this email : {self.email}>'
@@ -69,7 +71,8 @@ class Outing(db.Model):
         db.session.commit()
 
 class FriendList(db.Model):
-    outing_id = db.Column(db.String(36), db.ForeignKey('outing.id'), primary_key=True)
+    id = db.Column(db.Integer, primary_key=True)
+    outing_id = db.Column(db.String(36), db.ForeignKey('outing.id'))
     user_id = db.Column(db.Integer, db.ForeignKey('user.id'), nullable=False)
 
     outing = db.relationship('Outing', backref=db.backref('friend_list', lazy=True))
@@ -162,16 +165,18 @@ class AiMessage(db.Model):
 
 class Messages(db.Model):
     id = db.Column(db.String(36), primary_key=True, default=lambda: str(uuid.uuid4()))
+    messages_group_id = db.Column(db.String(36), db.ForeignKey('outing.id'))
     message_id = db.Column(db.Integer, db.ForeignKey('message.id'), nullable=False)
 
+    outing = db.relationship('Outing', backref=db.backref('messages', lazy=True))
     message = db.relationship('Message', backref=db.backref('messages', lazy=True))
 
     def __repr__(self):
-        return f'<Messages {self.id}, Message {self.message_id}>'
+        return f'<Messages {self.messages_group_id}, Message {self.message_id}>'
 
     def to_dict(self):
         return {
-            'id': self.id,
+            'group_id': self.messages_group_id,
             'message_id': self.message_id
         }
 
@@ -189,16 +194,18 @@ class Messages(db.Model):
 
 class AiMessages(db.Model):
     id = db.Column(db.String(36), primary_key=True, default=lambda: str(uuid.uuid4()))
+    ai_messages_group_id = db.Column(db.String(36), db.ForeignKey('outing.id'))
     ai_message_id = db.Column(db.Integer, db.ForeignKey('ai_message.id'), nullable=False)
 
+    outing = db.relationship('Outing', backref=db.backref('ai_messages', lazy=True))
     ai_message = db.relationship('AiMessage', backref=db.backref('ai_messages', lazy=True))
 
     def __repr__(self):
-        return f'<AiMessages {self.id}, AI Message {self.ai_message_id}>'
+        return f'<Outing {self.ai_messages_group_id}, AI Message {self.ai_message_id}>'
 
     def to_dict(self):
         return {
-            'id': self.id,
+            'group_id': self.ai_messages_group_id,
             'ai_message_id': self.ai_message_id
         }
 
@@ -214,33 +221,60 @@ class AiMessages(db.Model):
         db.session.add(self)
         db.session.commit()
 
-class GroupChat(db.Model):
-    outing_id = db.Column(db.String(36), db.ForeignKey('outing.id'), primary_key=True)
-    messages_id = db.Column(db.String(36), db.ForeignKey('messages.id'), nullable=False)
-    ai_messages_id = db.Column(db.String(36), db.ForeignKey('ai_messages.id'), nullable=False)
-
-    outing = db.relationship('Outing', backref=db.backref('group_chat', lazy=True))
-    messages = db.relationship('Messages', backref=db.backref('group_chat', lazy=True))
-    ai_messages = db.relationship('AiMessages', backref=db.backref('group_chat', lazy=True))
-
-    def __repr__(self):
-        return f'<GroupChat Outing {self.outing_id}, Messages {self.messages_id}, AI Messages {self.ai_messages_id}>'
-
-    def to_dict(self):
-        return {
-            'outing_id': self.outing_id,
-            'messages_id': self.messages_id,
-            'ai_messages_id': self.ai_messages_id
-        }
-
-    @classmethod
-    def get_all(cls):
-        return cls.query.all()
-
-    @classmethod
-    def get_by_outing_id(cls, outing_id):
-        return cls.query.filter_by(outing_id=outing_id).first()
-
-    def save(self):
-        db.session.add(self)
-        db.session.commit()
+# class GroupChat(db.Model):
+#     id = db.Column(db.Integer, primary_key=True)
+#     outing_id = db.Column(db.String(36), db.ForeignKey('outing.id'), primary_key=True)
+#     messages_id = db.Column(db.Integer, db.ForeignKey('messages.messages_group_id'), nullable=False)
+#
+#     outing = db.relationship('Outing', backref=db.backref('group_chat', lazy=True))
+#     messages = db.relationship('Messages', backref=db.backref('group_chat', lazy=True))
+#
+#     def __repr__(self):
+#         return f'<GroupChat Outing {self.outing_id}, Messages {self.messages_id}>'
+#
+#     def to_dict(self):
+#         return {
+#             'outing_id': self.outing_id,
+#             'messages_id': self.messages_id
+#         }
+#
+#     @classmethod
+#     def get_all(cls):
+#         return cls.query.all()
+#
+#     @classmethod
+#     def get_by_outing_id(cls, outing_id):
+#         return cls.query.filter_by(outing_id=outing_id).first()
+#
+#     def save(self):
+#         db.session.add(self)
+#         db.session.commit()
+#
+# class GroupChatAI(db.Model):
+#     id = db.Column(db.Integer, primary_key=True)
+#     outing_id = db.Column(db.String(36), db.ForeignKey('outing.id'))
+#     ai_messages_id = db.Column(db.Integer, db.ForeignKey('ai_messages.ai_messages_group_id'), nullable=False)
+#
+#     outing = db.relationship('Outing', backref=db.backref('group_chat_ai', lazy=True))
+#     ai_messages = db.relationship('AiMessages', backref=db.backref('group_chat_ai', lazy=True))
+#
+#     def __repr__(self):
+#         return f'<GroupChat Outing {self.outing_id}, AI Messages {self.ai_messages_id}>'
+#
+#     def to_dict(self):
+#         return {
+#             'outing_id': self.outing_id,
+#             'ai_messages_id': self.ai_messages_id
+#         }
+#
+#     @classmethod
+#     def get_all(cls):
+#         return cls.query.all()
+#
+#     @classmethod
+#     def get_by_outing_id(cls, outing_id):
+#         return cls.query.filter_by(outing_id=outing_id).first()
+#
+#     def save(self):
+#         db.session.add(self)
+#         db.session.commit()
