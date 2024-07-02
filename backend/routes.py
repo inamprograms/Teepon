@@ -20,6 +20,7 @@ def users_blueprint():
                 display_name = request.json.get('name')
                 email = request.json.get('email')
                 refresh_token = request.json.get('refresh_token')
+                access_token = request.json.get('access_token')
 
                 user = User.query.filter_by(email = email).first()
                 if user:
@@ -28,7 +29,8 @@ def users_blueprint():
                     uid = uid,
                     email=email,
                     display_name = display_name,
-                    refresh_token= refresh_token
+                    refresh_token= refresh_token,
+                    access_token = access_token
                 )
                 db.session.add(user)
                 db.session.commit()
@@ -56,6 +58,7 @@ def users_blueprint():
         elif request.method == 'POST':
             display_name = request.json.get('display_name')
             refresh_token = request.json.get('refresh_token')
+            access_token = request.json.get('access_token')
             try:
                 user = User.query.filter_by(email=email).first()
                 if user and user.active:
@@ -63,6 +66,8 @@ def users_blueprint():
                         user.display_name = display_name
                     if refresh_token:
                         user.refresh_token = refresh_token
+                    if access_token:
+                        user.access_token = access_token
                     db.session.commit()
                     return jsonify({'user': user.to_dict()}), 200
                 else:
@@ -354,8 +359,7 @@ def users_blueprint():
 
                 messages = (db.session.query(Message.send_from, Message.content)
                             .join(Messages)
-                            .filter(Message.id == Messages.message_id)
-                            .filter(Messages.messages_group_id == Outing.id)
+                            .filter(Messages.messages_group_id == str(outing_id))
                             .order_by(Message.datetime)
                             .all())
                 # messages = sorted(messages, key=lambda msg: msg.datetime)
@@ -375,11 +379,10 @@ def users_blueprint():
                     return jsonify({'error': f'Outing with ID {outing_id} not found'}), 404
 
                 ai_messages = (db.session.query(AiMessage.send_from, AiMessage.content)
-                            .join(AiMessages)
-                            .filter(AiMessage.id == AiMessages.ai_message_id)
-                            .filter(AiMessages.ai_messages_group_id == Outing.id)
-                            .order_by(desc(AiMessage.datetime))
-                            .all())
+                               .join(AiMessages)
+                               .filter(AiMessages.ai_messages_group_id == str(outing_id))
+                               .order_by(AiMessage.datetime)
+                               .all())
                 formatted_messages = [{'send_from': User.query.filter_by(id=send_from).first().email if send_from else "NULL", 'content': content} for send_from, content in
                                       ai_messages]
 
