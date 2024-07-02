@@ -217,19 +217,44 @@ class AiMessages(db.Model):
 class GroupChat(db.Model):
     outing_id = db.Column(db.String(36), db.ForeignKey('outing.id'), primary_key=True)
     messages_id = db.Column(db.String(36), db.ForeignKey('messages.id'), nullable=False)
-    ai_messages_id = db.Column(db.String(36), db.ForeignKey('ai_messages.id'), nullable=False)
 
     outing = db.relationship('Outing', backref=db.backref('group_chat', lazy=True))
     messages = db.relationship('Messages', backref=db.backref('group_chat', lazy=True))
-    ai_messages = db.relationship('AiMessages', backref=db.backref('group_chat', lazy=True))
 
     def __repr__(self):
-        return f'<GroupChat Outing {self.outing_id}, Messages {self.messages_id}, AI Messages {self.ai_messages_id}>'
+        return f'<GroupChat Outing {self.outing_id}, Messages {self.messages_id}>'
 
     def to_dict(self):
         return {
             'outing_id': self.outing_id,
-            'messages_id': self.messages_id,
+            'messages_id': self.messages_id
+        }
+
+    @classmethod
+    def get_all(cls):
+        return cls.query.all()
+
+    @classmethod
+    def get_by_outing_id(cls, outing_id):
+        return cls.query.filter_by(outing_id=outing_id).first()
+
+    def save(self):
+        db.session.add(self)
+        db.session.commit()
+
+class GroupChatAI(db.Model):
+    outing_id = db.Column(db.String(36), db.ForeignKey('outing.id'), primary_key=True)
+    ai_messages_id = db.Column(db.String(36), db.ForeignKey('ai_messages.id'), nullable=False)
+
+    outing = db.relationship('Outing', backref=db.backref('group_chat_ai', lazy=True))
+    ai_messages = db.relationship('AiMessages', backref=db.backref('group_chat_ai', lazy=True))
+
+    def __repr__(self):
+        return f'<GroupChat Outing {self.outing_id}, AI Messages {self.ai_messages_id}>'
+
+    def to_dict(self):
+        return {
+            'outing_id': self.outing_id,
             'ai_messages_id': self.ai_messages_id
         }
 
